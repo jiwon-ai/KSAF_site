@@ -1,6 +1,507 @@
-ksaf-site/
-  index.html
-  images/
-    ski1.jpg
-    ski2.jpg
-    ski3.jpg
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>KOREAN SKI ASSOCIATION OF FRANCE (KSAF)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="KOREAN SKI ASSOCIATION OF FRANCE (KSAF) - Association loi 1901 réunissant les passionnés de ski et de snowboard entre la France et la Corée." />
+
+  <style>
+    :root {
+      --blue: #0055a4;   /* bleu France / Corée */
+      --red:  #ef4135;   /* rouge */
+      --white: #ffffff;
+      --text: #000000;   /* noir */
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--white);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    /* Top tricolore */
+    .top-bar {
+      height: 8px;
+      background: linear-gradient(90deg, var(--blue), var(--white), var(--red));
+    }
+
+    header {
+      padding: 1rem 1.5rem;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(255,255,255,0.96);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid #e5e5e5;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo-title {
+      display: flex;
+      flex-direction: column;
+      gap: 0.1rem;
+    }
+
+    .logo-title span:first-child {
+      font-weight: 700;
+      font-size: 0.9rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .logo-title span:last-child {
+      font-size: 0.8rem;
+      opacity: 0.8;
+    }
+
+    nav a {
+      margin-left: 1rem;
+      text-decoration: none;
+      font-size: 0.9rem;
+      color: var(--text);
+    }
+
+    nav a:hover {
+      text-decoration: underline;
+    }
+
+    /* Mobile nav */
+    .nav-toggle {
+      display: none;
+      border: none;
+      background: transparent;
+      font-size: 1.4rem;
+      cursor: pointer;
+    }
+
+    @media (max-width: 720px) {
+      nav {
+        display: none;
+        position: absolute;
+        top: 100%;
+        right: 0;
+        background: #ffffff;
+        border-left: 1px solid #eee;
+        border-bottom: 1px solid #eee;
+        padding: 0.5rem 1rem;
+      }
+      nav.open {
+        display: block;
+      }
+      nav a {
+        display: block;
+        margin: 0.4rem 0;
+      }
+      .nav-toggle {
+        display: block;
+      }
+    }
+
+    /* Hero */
+    .hero {
+      padding: 4rem 1.5rem 3rem;
+      text-align: center;
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.8rem;
+      padding: 0.35rem 0.7rem;
+      border-radius: 999px;
+      border: 1px solid #ddd;
+      margin-bottom: 1rem;
+    }
+
+    .hero-title {
+      font-size: clamp(1.8rem, 4vw, 2.6rem);
+      margin: 0 0 0.75rem;
+    }
+
+    .hero-subtitle {
+      max-width: 640px;
+      margin: 0 auto 1.5rem;
+      font-size: 0.98rem;
+      opacity: 0.9;
+    }
+
+    .hero-actions {
+      display: flex;
+      justify-content: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      margin-bottom: 2rem;
+    }
+
+    .btn-primary,
+    .btn-outline {
+      border-radius: 999px;
+      padding: 0.55rem 1.2rem;
+      font-size: 0.9rem;
+      border: 1px solid var(--blue);
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .btn-primary {
+      background: var(--blue);
+      color: var(--white);
+    }
+
+    .btn-primary:hover {
+      opacity: 0.9;
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--blue);
+    }
+
+    .btn-outline:hover {
+      background: rgba(0,85,164,0.05);
+    }
+
+    .hero-note {
+      font-size: 0.8rem;
+      opacity: 0.7;
+    }
+
+    /* Sections */
+    section {
+      padding: 2.5rem 1.5rem;
+    }
+
+    .section-inner {
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    h2 {
+      font-size: 1.4rem;
+      margin-top: 0;
+      margin-bottom: 0.8rem;
+    }
+
+    .two-cols {
+      display: grid;
+      grid-template-columns: 1.3fr 1fr;
+      gap: 2rem;
+      align-items: flex-start;
+    }
+
+    @media (max-width: 800px) {
+      .two-cols {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .pill-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-top: 1rem;
+    }
+
+    .pill {
+      font-size: 0.78rem;
+      padding: 0.25rem 0.6rem;
+      border-radius: 999px;
+      border: 1px solid #ddd;
+      background: #fafafa;
+    }
+
+    /* Galerie */
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .gallery-item {
+      position: relative;
+      overflow: hidden;
+      border-radius: 10px;
+      border: 1px solid #eee;
+      background: #f5f5f5;
+    }
+
+    .gallery-item img {
+      display: block;
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      transition: transform 0.4s ease;
+    }
+
+    .gallery-item:hover img {
+      transform: scale(1.05);
+    }
+
+    .gallery-caption {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      padding: 0.4rem 0.6rem;
+      font-size: 0.8rem;
+      background: linear-gradient(to top, rgba(0,0,0,0.55), transparent);
+      color: #ffffff;
+    }
+
+    /* Contact */
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+      gap: 2rem;
+    }
+
+    @media (max-width: 800px) {
+      .contact-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .contact-card {
+      border-radius: 12px;
+      border: 1px solid #e5e5e5;
+      padding: 1.25rem;
+      background: #fafafa;
+      font-size: 0.9rem;
+    }
+
+    form label {
+      display: block;
+      margin-bottom: 0.25rem;
+      font-size: 0.85rem;
+    }
+
+    form input,
+    form textarea {
+      width: 100%;
+      padding: 0.5rem 0.6rem;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 0.9rem;
+      font-family: inherit;
+      margin-bottom: 0.75rem;
+    }
+
+    form textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    form button {
+      border-radius: 999px;
+      padding: 0.55rem 1.2rem;
+      font-size: 0.9rem;
+      border: 1px solid var(--red);
+      background: var(--red);
+      color: var(--white);
+      cursor: pointer;
+    }
+
+    form button:hover {
+      opacity: 0.9;
+    }
+
+    footer {
+      padding: 1rem 1.5rem 2rem;
+      text-align: center;
+      font-size: 0.8rem;
+      border-top: 1px solid #eee;
+      background: #fafafa;
+    }
+
+    footer span {
+      opacity: 0.7;
+    }
+  </style>
+</head>
+<body>
+  <div class="top-bar"></div>
+
+  <header>
+    <div class="logo-title">
+      <span>KOREAN SKI ASSOCIATION OF FRANCE</span>
+      <span>Association loi 1901 · Ski & Snowboard France – Corée</span>
+    </div>
+
+    <button class="nav-toggle" aria-label="Ouvrir le menu">☰</button>
+    <nav>
+      <a href="#mission">Mission</a>
+      <a href="#galerie">Galerie</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-badge">
+        🇫🇷·🇰🇷 <span>Communauté de ski France – Corée</span>
+      </div>
+      <h1 class="hero-title">KOREAN SKI ASSOCIATION OF FRANCE (KSAF)</h1>
+      <p class="hero-subtitle">
+        KSAF rassemble les passionnés de ski et de snowboard d’origine coréenne vivant en France, ainsi que leurs amis.
+        Notre objectif : partager la neige, la montagne et un esprit de communauté entre la France et la Corée.
+      </p>
+      <div class="hero-actions">
+        <a href="#contact" class="btn-primary">Rejoindre la communauté</a>
+        <a href="#mission" class="btn-outline">En savoir plus</a>
+      </div>
+      <p class="hero-note">
+        Site en construction – les premières sorties officielles seront annoncées prochainement.
+      </p>
+    </section>
+
+    <section id="mission">
+      <div class="section-inner two-cols">
+        <div>
+          <h2>Notre mission</h2>
+          <p>
+            L’association KOREAN SKI ASSOCIATION OF FRANCE (KSAF) a été créée en 2025 par des passionnés de ski en France
+            et en Corée, avec la volonté de construire une communauté chaleureuse autour des sports d’hiver.
+          </p>
+          <p>
+            Nous souhaitons :
+          </p>
+          <ul>
+            <li>organiser des sorties de ski et de snowboard dans les stations françaises,</li>
+            <li>faciliter les rencontres entre la communauté coréenne et les amoureux de la culture coréenne,</li>
+            <li>partager des informations pratiques sur les stations, le matériel et la sécurité,</li>
+            <li>créer un pont culturel entre la France et la Corée à travers la montagne.</li>
+          </ul>
+        </div>
+        <div>
+          <h3>En quelques mots</h3>
+          <p>
+            KSAF est une association loi 1901 à but non lucratif.  
+            Le site a pour but d’informer, de rassembler et de donner envie de rejoindre nos futures activités.
+          </p>
+          <div class="pill-list">
+            <span class="pill">Ski & Snowboard</span>
+            <span class="pill">France · Corée</span>
+            <span class="pill">Communauté</span>
+            <span class="pill">Sports d’hiver</span>
+            <span class="pill">Culture & échanges</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="galerie">
+      <div class="section-inner">
+        <h2>Galerie</h2>
+        <p>
+          Quelques images pour illustrer l’esprit KSAF : neige, montagne, virages coupés et rires partagés.
+        </p>
+        <div class="gallery-grid">
+          <div class="gallery-item">
+            <img src="images/ski1.jpg" alt="Skieurs sur une piste ensoleillée" />
+            <div class="gallery-caption">Sortie en groupe – pistes ensoleillées</div>
+          </div>
+          <div class="gallery-item">
+            <img src="images/ski2.jpg" alt="Paysage de montagne enneigée" />
+            <div class="gallery-caption">Panorama alpin – neige fraîche</div>
+          </div>
+          <div class="gallery-item">
+            <img src="images/ski3.jpg" alt="Snowboarder dans la poudreuse" />
+            <div class="gallery-caption">Snowboard & poudreuse</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact">
+      <div class="section-inner contact-grid">
+        <div>
+          <h2>Nous contacter</h2>
+          <p>
+            Vous souhaitez rejoindre l’association, proposer une idée de sortie ou simplement poser une question ?
+          </p>
+          <div class="contact-card">
+            <p><strong>Adresse e-mail (provisoire) :</strong></p>
+            <p>
+              <a href="mailto:contact@ksaf.fr">contact@ksaf.fr</a>
+            </p>
+            <p style="margin-top:0.8rem;">
+              Vous pouvez également utiliser le formulaire ci-contre.  
+              Nous reviendrons vers vous dès que possible.
+            </p>
+          </div>
+        </div>
+        <div>
+          <h3>Formulaire de contact (simple)</h3>
+          <!--
+            NOTE:
+            Ce formulaire utilise "mailto:" – il ouvrira le client e-mail de la personne.
+            Pour un vrai back-end (stockage des messages), il faudra plus tard brancher un service comme Formspree, Getform, etc.
+          -->
+          <form action="mailto:contact@ksaf.fr" method="post" enctype="text/plain">
+            <label for="name">Nom</label>
+            <input id="name" name="Nom" type="text" required />
+
+            <label for="email">E-mail</label>
+            <input id="email" name="Email" type="email" required />
+
+            <label for="message">Message</label>
+            <textarea id="message" name="Message" required></textarea>
+
+            <button type="submit">Envoyer</button>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>© <span id="year"></span> KOREAN SKI ASSOCIATION OF FRANCE (KSAF). Tous droits réservés.</span>
+  </footer>
+
+  <script>
+    // Smooth scroll pour les liens internes
+    document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
+      anchor.addEventListener('click', function (e) {
+        const targetId = this.getAttribute('href');
+        const target = document.querySelector(targetId);
+        if (!target) return;
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        // fermer le menu mobile si ouvert
+        const nav = document.querySelector('header nav');
+        if (nav && nav.classList.contains('open')) {
+          nav.classList.remove('open');
+        }
+      });
+    });
+
+    // Menu mobile
+    const toggle = document.querySelector('.nav-toggle');
+    const nav = document.querySelector('header nav');
+    if (toggle && nav) {
+      toggle.addEventListener('click', () => {
+        nav.classList.toggle('open');
+      });
+    }
+
+    // Année dans le footer
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
