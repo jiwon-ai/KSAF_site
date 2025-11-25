@@ -476,6 +476,75 @@
     .fade-delay-1 { animation-delay: 0.1s; }
     .fade-delay-2 { animation-delay: 0.25s; }
     .fade-delay-3 { animation-delay: 0.4s; }
+
+    /* === Extra JS-driven styles === */
+
+/* Header shrink on scroll */
+header.header-scrolled {
+  padding-block: 0.5rem;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.15);
+}
+
+/* Active nav link */
+header nav a.active {
+  font-weight: 600;
+  color: var(--blue);
+}
+
+header nav a.active::after {
+  width: 100%;
+}
+
+/* Lightbox for gallery */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.lightbox.open {
+  display: flex;
+}
+
+.lightbox-figure {
+  max-width: 90vw;
+  max-height: 80vh;
+  background: #111;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.7);
+  position: relative;
+}
+
+.lightbox-figure img {
+  display: block;
+  max-width: 100%;
+  max-height: 70vh;
+  object-fit: contain;
+}
+
+.lightbox-figure figcaption {
+  padding: 0.7rem 1rem;
+  font-size: 0.85rem;
+  color: #f5f5f5;
+  background: linear-gradient(90deg, #0055a4, #ef4135);
+}
+
+.lightbox-close {
+  position: absolute;
+  top: 0.35rem;
+  right: 0.5rem;
+  border: none;
+  background: transparent;
+  color: #ffffff;
+  font-size: 1.8rem;
+  cursor: pointer;
+}
+
   </style>
 </head>
 <body>
@@ -636,7 +705,7 @@
     <span>© <span id="year"></span> KOREAN SKI ASSOCIATION OF FRANCE (KSAF). Tous droits réservés. Site créé par Jiwon Yi.</span>
   </footer>
 
-  <script>
+    <script>
     // Smooth scroll pour les liens internes
     document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
       anchor.addEventListener('click', function (e) {
@@ -664,6 +733,91 @@
 
     // Année dans le footer
     document.getElementById('year').textContent = new Date().getFullYear();
+
+    // 1) Header shrink + active menu on scroll
+    const header = document.querySelector('header');
+    const sections = document.querySelectorAll('main section[id]');
+    const navLinks = document.querySelectorAll('header nav a');
+
+    function onScroll() {
+      // Header shrink
+      if (window.scrollY > 40) {
+        header.classList.add('header-scrolled');
+      } else {
+        header.classList.remove('header-scrolled');
+      }
+
+      // Active section highlight
+      let currentId = null;
+      sections.forEach(sec => {
+        const rect = sec.getBoundingClientRect();
+        if (rect.top <= 100 && rect.bottom >= 100) {
+          currentId = sec.id;
+        }
+      });
+
+      navLinks.forEach(link => {
+        const href = link.getAttribute('href');
+        link.classList.toggle('active', href === '#' + currentId);
+      });
+    }
+
+    window.addEventListener('scroll', onScroll);
+    // initial call
+    onScroll();
+
+    // 2) Lightbox pour la galerie
+    const images = document.querySelectorAll('.gallery-item img');
+
+    if (images.length > 0) {
+      // créer le lightbox une seule fois
+      const lightbox = document.createElement('div');
+      lightbox.className = 'lightbox';
+      lightbox.innerHTML = `
+        <figure class="lightbox-figure">
+          <img src="" alt="">
+          <figcaption></figcaption>
+          <button class="lightbox-close" aria-label="Fermer">×</button>
+        </figure>
+      `;
+      document.body.appendChild(lightbox);
+
+      const lightboxImg = lightbox.querySelector('img');
+      const lightboxCaption = lightbox.querySelector('figcaption');
+      const lightboxClose = lightbox.querySelector('.lightbox-close');
+
+      function openLightbox(src, caption) {
+        lightboxImg.src = src;
+        lightboxCaption.textContent = caption || '';
+        lightbox.classList.add('open');
+      }
+
+      function closeLightbox() {
+        lightbox.classList.remove('open');
+      }
+
+      images.forEach(img => {
+        img.style.cursor = 'zoom-in';
+        img.addEventListener('click', () => {
+          const src = img.getAttribute('src');
+          const captionEl = img.parentElement.querySelector('.gallery-caption');
+          const caption = captionEl ? captionEl.textContent.trim() : '';
+          openLightbox(src, caption);
+        });
+      });
+
+      lightboxClose.addEventListener('click', closeLightbox);
+      lightbox.addEventListener('click', (e) => {
+        if (e.target === lightbox) {
+          closeLightbox();
+        }
+      });
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && lightbox.classList.contains('open')) {
+          closeLightbox();
+        }
+      });
+    }
   </script>
 </body>
 </html>
